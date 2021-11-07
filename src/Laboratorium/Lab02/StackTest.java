@@ -1,90 +1,112 @@
-package Laboratorium.Lab02;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-public class StackTest {
+public class StackTest
+{
 	private Stack sut;
 
 	@Before
-	public void setup() {
-		sut = new Stack(10);
+	public void Setup ()
+	{
+		sut = new Stack(13);
 	}
 
 	@Test
-	public void testPopAfterPush() {
-		sut.push(10);
-		int result = sut.pop();
-
-		assertEquals("pop after push", 10, result);
-	}
-	@Test
-	public void checkIfCanCreateSut() {
-		assertNotEquals("Stack null", null , sut);
+	public void TestIfCanCreateSut ()
+	{
+		assertNotEquals("Stack is not null", null , sut);
 	}
 
+
 	@Test
-	public void push_SingleNumberAddedToStack_WhenPeekNumberIstheSame() {
-		// Arrange
-		sut.push(5);
-		// Act
-		int result = sut.peek();
-		// Assert
-		assertEquals( 5, result);
+	public void TestTrueEmptyStack ()
+	{
+		assertEquals("Stack is empty", true, sut.isEmpty());
 	}
 
 	@Test
-	public void push_TwoNumbersAddedToStack_LastOnePeekd() {
-		sut.push(5);
-		sut.push(7);
-		int result = sut.peek();
-		assertEquals( 7, result);
-	}
-
-	@Test
-	public void pop_TwoNumbersPushedToStack_CorrectNumberReturnedByTheSndPop() {
-		sut.push(5);
-		sut.push(7);
-		sut.pop();
-		int result = sut.pop();
-		assertEquals( 5, result);
-	}
-
-	@Test
-	public void push_ThousendElementsPushedAndAllPoped_FirstPushedReturned() {
-		for (int i = 0; i < 1000; i++) {
-			sut.push(i);
-		}
-		int result = -1;
-		for (int i = 0; i < 1000; i++) {
-			result = sut.pop();
-		}
-		assertEquals( 0, result);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void pop_TooManyPopsCalled_InvalidOperationException() {
+	public void TestFalseEmptyStack ()
+	{
 		sut.push(1);
-		sut.pop();
-		sut.pop();
+		assertEquals("Stack is not empty", false, sut.isEmpty());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void Peek_StackIsEmpty_InvalidOperationException() {
+	public void TestPeekOnEmptyStack ()
+	{
 		sut.peek();
 	}
 
 	@Test
-	public void isEmpty_StackIsEmpty_ReturnedTrue() {
-		assertEquals(true,sut.isEmpty());
+	public void TestPopAfterPushAndDropOfElement ()
+	{
+		sut.push(10);
+		int result = sut.pop();
+		boolean result2 = sut.isEmpty();
+		assertEquals("Pop after push", 10, result);
+		assertEquals("Stack is empty", true, result2);
 	}
 
 	@Test
-	public void isEmpty_StackHasElements_ReturnedFalse() {
+	public void TestPeekAfterPush ()
+	{
+		sut.push(13);
+		int result = sut.peek();
+		assertEquals("Peek after push", 13, result);
+	}
+
+	@Test
+	public void TestDoublePushAndPeek ()
+	{
+		sut.push(4);
 		sut.push(1);
-		assertEquals(false,sut.isEmpty());
+		int result = sut.peek();
+		assertEquals("Peek after double push", 1, result);
+	}
+
+	@Test
+	public void TestDoublePushAndPop ()
+	{
+		sut.push(2);
+		sut.push(3);
+		sut.pop();
+		int result = sut.pop();
+		assertEquals("Pop after double push", 2, result);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void TestDoublePopAfterSinglePush ()
+	{
+		sut.push(1);
+		sut.pop();
+		sut.pop();
+	}
+
+	@Test
+	public void TestFirstElementPopAfterhundredPushes ()
+	{
+		for (int j = 0; j < 100; j++) {
+			sut.push(j);
+		}
+		int result = -1;
+		for (int j = 0; j < 100; j++) {
+			result = sut.pop();
+		}
+		assertEquals("Pop of first element from stack of 100 elements", 0, result);
+	}
+
+	@Test
+	public void TestPenultimateElementPopAfterhundredPushes ()
+	{
+		for (int j = 0; j < 100; j++) {
+			sut.push(j);
+		}
+		int result = -1;
+		for (int j = 0; j < 1; j++) {
+			result = sut.pop();
+		}
+		assertEquals("Pop of penultimate element from stack of 100 elements", 99, result);
 	}
 }
